@@ -23,9 +23,10 @@ def modExp(aVal, kVal, nVal):
                 bVal = A_val * bVal % nVal
     return bVal
 
+
 def convertToBytes(val:int, len:int=64):
-    # return val.decode("UTF-8")
     return val.to_bytes(len, byteorder='big', signed=False)
+
 
 if __name__ == '__main__':
     maxRandomExp = 40
@@ -53,16 +54,16 @@ if __name__ == '__main__':
     print(f"Bob received e={e}, n={n} from Alice")
 
     print("Bob picks a 'b' value as an index of the values sent to him.")
-    bob_bVal = input("Please pick a 'b' value (0 or 1): ").strip()
+    bob_bVal = input(f"Please pick a 'b' value (0 to {len(bob_randoms)}): ").strip()
     bob_bVal = int(bob_bVal)
 
     x_b = bob_randoms[bob_bVal]
     kVal = random.randint(0, int(math.pow(2, maxRandomExp)))
     print(f"Bob calculates a random 'k' value - {kVal}")
 
-    v = rsa.encrypt(pickle.dumps(kVal+x_b), alicePubKey) # Using pickle to make it into a byte string
-    # v = modExp(x_b + kVal, e, n)
-    print("Bob encrypts the value 'x_b + k' with Alice's public key.  Since Alice does not know k, she cannot fully decrypt it.")
+    v = rsa.encrypt(pickle.dumps(kVal+x_b), alicePubKey)  # Using pickle to make it into a byte string
+    print("Bob encrypts the value 'x_b + k' with Alice's public key.  Since Alice does not know k, she cannot fully "
+          "decrypt it.")
     print(f"v={v}")
     print(f"Bob sends {v} to Alice")
 
@@ -75,8 +76,13 @@ if __name__ == '__main__':
     corrMessage = corrMessage.strip(b'\x00')
     print(f"Bob has message '{corrMessage}' which is the correct message")
 
-    print("If bob tried to decrypt the other message, he would not get the correct result")
-    otherIndex = 1 if bob_bVal == 0 else 0
-    otherMessage = convertToBytes(int(alice_altMessages[otherIndex] - kVal))
-    otherMessage = otherMessage.strip(b'\x00')
-    print(f"The other message would be '{otherMessage}' which is incorrect")
+    otherMessages = []
+    for altMess in alice_altMessages:
+        if altMess == alice_altMessages[bob_bVal]:
+            continue
+        bob_otherMessage = convertToBytes(int(altMess - kVal))
+        bob_otherMessage = bob_otherMessage.strip(b'\x00')
+        otherMessages.append(bob_otherMessage)
+
+    print("If bob tried to decrypt the other messages, he would not get the correct results")
+    print(f"The other messages would be '{otherMessages}' which are incorrect")

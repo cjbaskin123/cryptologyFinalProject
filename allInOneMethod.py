@@ -4,17 +4,15 @@ import time
 import random
 import rsa
 
-
 randomSeed = int(round(time.time() * 10))
 
 
-def convertFromBytes(val):
-    return int.from_bytes(val, byteorder='little', signed=False)
+def convertFromBytes(bytesVal):
+    return int.from_bytes(bytesVal, byteorder='little', signed=False)
 
 
-def convertToBytes(val:int, len:int=64):
-    # return val.decode("UTF-8")
-    return val.to_bytes(len, byteorder='little', signed=False)
+def convertToBytes(intVal: int, len: int = 64):
+    return intVal.to_bytes(len, byteorder='little', signed=False)
 
 
 def modExp(aVal, kVal, nVal):
@@ -40,7 +38,10 @@ if __name__ == '__main__':
     random.seed(randomSeed)
     maxRandomExp = 50
 
-    alice_messages = ['Message0IsThisOne'.encode("UTF-8"), 'thisIsMessage1'.encode("UTF-8")]  #, b'item3', b'item4', b'item5']
+    alice_messages = ['Message0IsThisOne'.encode("UTF-8"), 'thisIsMessage1'.encode("UTF-8"),
+                      'thisIsTestingItem2'.encode("UTF-8"),
+                      'thisIsTestingItem3'.encode("UTF-8"), 'thisIsTestingTheItem4'.encode("UTF-8"),
+                      'thisIsTestingTheItem5'.encode("UTF-8")]
 
     alice_public, alice_private = rsa.newkeys(512)
 
@@ -49,22 +50,20 @@ if __name__ == '__main__':
     bob_E = alice_public.e
 
     alice_randoms_x = []
-    for i in range(2):
+    for i in range(len(alice_messages)):
         alice_randoms_x.append(random.randint(0, int(math.pow(2, maxRandomExp))))
 
     # Send randoms to Bob
     print(f"Alice sends {alice_randoms_x} to Bob")
     bob_randoms_x = alice_randoms_x
 
-    print("Bob picks a 'b' value as an index of the values sent to him.  Suppose Bob picks b=1")
-    bob_b = 1
+    bob_b = len(alice_messages) // 2
+    print(f"Bob picks a 'b' value as an index of the values sent to him.  Suppose Bob picks b={bob_b}")
     bob_x_b = bob_randoms_x[bob_b]
     bob_kVal = random.randint(0, int(math.pow(2, maxRandomExp)))
     print(f"Bob calculates a random 'k' value - {bob_kVal}")
 
-    # bob_v = int(modExp(int(bob_x_b + kVal), bob_E, bob_N))
-    # bob_v = modExp(kVal, bob_E, bob_N)
-    bob_v = rsa.encrypt(pickle.dumps(bob_kVal+bob_x_b), alice_public)
+    bob_v = rsa.encrypt(pickle.dumps(bob_kVal + bob_x_b), alice_public)
     print(f"Bob encrypts the value 'x_b + k' with Alice's public key.  Since Alice does not know k, she cannot fully "
           f"decrypt it.")
     print(f"Bob calculates v={bob_v}")
@@ -80,8 +79,7 @@ if __name__ == '__main__':
 
     alice_kVals = []
     for val in alice_randoms_x:
-        # alice_kVal = int(modExp(int(alice_v-val), alice_private.d, alice_private.n))
-        alice_kVal = kva-val
+        alice_kVal = kva - val
         alice_kVals.append(alice_kVal)
 
     print("Alice now develops integer strings which are composed of the integer-converted messages + the generated k "
@@ -97,8 +95,13 @@ if __name__ == '__main__':
     bob_corrMessage = bob_corrMessage.strip(b'\x00')
     print(f"Bob has message {bob_corrMessage}")
 
-    bob_otherMessage = convertToBytes(int(bob_altMessages[0] - bob_kVal))
-    bob_otherMessage = bob_otherMessage.strip(b'\x00')
+    bob_otherMessages = []
+    for altMess in bob_altMessages:
+        if altMess == bob_altMessages[bob_b]:
+            continue
+        bob_otherMessage = convertToBytes(int(altMess - bob_kVal))
+        bob_otherMessage = bob_otherMessage.strip(b'\x00')
+        bob_otherMessages.append(bob_otherMessage)
 
-    print(f"If bob tried to view the other message with his K val, he would get {bob_otherMessage}, which is an "
-          f"incorrect value")
+    print(f"If bob tried to view the other messages with his K intVal, he would get {bob_otherMessages}, which are "
+          f"incorrect values")

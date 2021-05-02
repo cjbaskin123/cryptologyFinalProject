@@ -33,12 +33,15 @@ if __name__ == '__main__':
 
     socketComm.connect((HOST, PORT))
 
-    alice_messages = ['This is a test message at index 0'.encode("UTF-8"), 'This alternate test message is a different message at index 1'.encode("UTF-8")]
+    alice_messages = ['Message0IsThisOne'.encode("UTF-8"), 'thisIsMessage1'.encode("UTF-8"),
+                'thisIsTestingItem2'.encode("UTF-8"),
+                'thisIsTestingItem3'.encode("UTF-8"), 'thisIsTestingTheItem4'.encode("UTF-8"),
+                'thisIsTestingTheItem5'.encode("UTF-8")]
 
     maxRandomExp = 40
 
     alice_randoms = []
-    for i in range(2):
+    for i in range(len(alice_messages)):
         alice_randoms.append(random.randint(0, int(math.pow(2, maxRandomExp))))
 
     print(f"Alice sends {alice_randoms} to Bob")
@@ -54,11 +57,11 @@ if __name__ == '__main__':
     decV = rsa.decrypt(v, alice_private)
     decV = pickle.loads(decV)
     print("Alice decrypts the 'v' value with her private key and subtracts each k value from it")
+    print("Since Alice does not know k, she cannot fully decrypt it.")
     print(f"Alice's decrypted 'v' value is {decV}")
 
     kVals = []
     for val in alice_randoms:
-        # kVal = modExp(v - val, alice_private.d, alice_private.n)
         kVal = decV-val
         kVals.append(kVal)
 
