@@ -6,7 +6,7 @@ import socket
 import rsa
 
 HOST = '127.0.0.1'
-PORT = 5464
+PORT = 54645
 
 def modExp(aVal, kVal, nVal):
     binKVals = bin(kVal)[2:]
