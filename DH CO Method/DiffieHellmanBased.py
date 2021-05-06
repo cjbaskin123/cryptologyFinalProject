@@ -73,14 +73,14 @@ def decode(ciphertext, key):
     return xored.decode('utf-8', errors='ignore')
 
 
-def transferData():
+if __name__ == '__main__':
     """
     Simulates the Oblivious Transfer process between Alice and Bob
     :return: Nothing
     """
-    shared_g = 2
+    shared_g = 2  # g is a generator number for the Diffie-Hellman Key Exchange that was previously agreed upon
 
-    alice_messages = ['Message0IsThisOne', 'thisIsMessage1'] # Alice's Messages
+    alice_messages = ['Message0IsThisOne', 'thisIsMessage1']  # Alice's Messages
 
     bob_c = 1 # Bob's c value
 
@@ -148,7 +148,3 @@ def transferData():
     print(f"Bob's message that he received is: {bob_decodedMessages[bob_c]}")
     bob_otherIndex = 0 if bob_c == 1 else 1
     print(f"The other message that Bob would see if he tried to decrypt it is: '{bob_decodedMessages[bob_otherIndex]}'")
-
-
-if __name__ == '__main__':
-    transferData()
