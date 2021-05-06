@@ -8,22 +8,6 @@ HOST = '127.0.0.1'
 PORT = 54645
 
 
-def modExp(aVal, kVal, nVal):
-    binKVals = bin(kVal)[2:]
-    binKVals = binKVals[::-1]
-    bVal = 1
-    A_val = aVal
-    for index in range(len(binKVals)):
-        if index == 0:
-            if binKVals[index] == '1':
-                bVal = aVal
-        else:
-            A_val = math.pow(A_val, 2) % nVal
-            if binKVals[index] == '1':
-                bVal = A_val * bVal % nVal
-    return bVal
-
-
 def convertFromBytes(val):
     return int.from_bytes(val, byteorder='big')
 

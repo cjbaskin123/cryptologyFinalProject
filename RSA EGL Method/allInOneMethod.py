@@ -15,25 +15,6 @@ def convertToBytes(intVal: int, len: int = 64):
     return intVal.to_bytes(len, byteorder='little', signed=False)
 
 
-def modExp(aVal, kVal, nVal):
-    binKVals = bin(kVal)[2:]
-    binKVals = binKVals[::-1]
-
-    bVal = 1
-    A_val = aVal
-
-    for index in range(len(binKVals)):
-        if index == 0:
-            if binKVals[index] == '1':
-                bVal = aVal
-        else:
-            A_val = math.pow(A_val, 2) % nVal
-            if binKVals[index] == '1':
-                bVal = A_val * bVal % nVal
-
-    return bVal
-
-
 if __name__ == '__main__':
     random.seed(randomSeed)
     maxRandomExp = 50
