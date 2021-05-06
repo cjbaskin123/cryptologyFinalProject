@@ -10,6 +10,12 @@ PORT = 54645
 
 
 def convertToBytes(val:int, len:int=64):
+    """
+    Converts the provided integer value into byte format
+    :param val: Integer value to convert
+    :param len: Length to use for byte representation (default:64)
+    :return: Byte representation of provided integer
+    """
     return val.to_bytes(len, byteorder='big', signed=False)
 
 

@@ -9,6 +9,11 @@ PORT = 54645
 
 
 def convertFromBytes(val):
+    """
+    Converts the bytes value provided into an integer
+    :param val: Value to convert
+    :return: integer value representation of the provided bytes
+    """
     return int.from_bytes(val, byteorder='big')
 
 
