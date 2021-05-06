@@ -29,11 +29,9 @@ def a_xor_b(a, b):
     outVals = []
     if (len(a) < len(b)):
         for (x,y) in zip(a, b[:len(a)]):
-            # print(f"{x}^{y}={x^y}")
             outVals.append(x^y)
     else:
         for (x,y) in zip(a[:len(b)], b):
-            # print(f"{x}^{y}={x ^ y}")
             outVals.append(x^y)
     return bytes(outVals)
 
