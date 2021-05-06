@@ -1,4 +1,3 @@
-import math
 import random
 import socket
 import pickle
@@ -31,7 +30,7 @@ if __name__ == '__main__':
 
     alice_randoms = []
     for i in range(len(alice_messages)):
-        alice_randoms.append(random.randint(0, int(math.pow(2, maxRandomExp))))
+        alice_randoms.append(random.randint(0, int(2 ** maxRandomExp)))
 
     print(f"Alice sends {alice_randoms} to Bob")
     socketComm.sendall(pickle.dumps(alice_randoms))

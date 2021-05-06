@@ -1,8 +1,6 @@
-import math
 import pickle
 import random
 import socket
-
 import rsa
 
 HOST = '127.0.0.1'
@@ -49,7 +47,7 @@ if __name__ == '__main__':
     bob_bVal = int(bob_bVal)
 
     x_b = bob_randoms[bob_bVal]
-    kVal = random.randint(0, int(math.pow(2, maxRandomExp)))
+    kVal = random.randint(0, int(2 ** maxRandomExp))
     print(f"Bob calculates a random 'k' value - {kVal}")
 
     v = rsa.encrypt(pickle.dumps(kVal+x_b), alicePubKey)  # Using pickle to make it into a byte string

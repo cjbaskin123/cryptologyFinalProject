@@ -1,4 +1,3 @@
-import math
 import pickle
 import time
 import random
@@ -32,7 +31,7 @@ if __name__ == '__main__':
 
     alice_randoms_x = []
     for i in range(len(alice_messages)):
-        alice_randoms_x.append(random.randint(0, int(math.pow(2, maxRandomExp))))
+        alice_randoms_x.append(random.randint(0, int(2 ** maxRandomExp)))
 
     # Send randoms to Bob
     print(f"Alice sends {alice_randoms_x} to Bob")
@@ -41,7 +40,7 @@ if __name__ == '__main__':
     bob_b = len(alice_messages) // 2
     print(f"Bob picks a 'b' value as an index of the values sent to him.  Suppose Bob picks b={bob_b}")
     bob_x_b = bob_randoms_x[bob_b]
-    bob_kVal = random.randint(0, int(math.pow(2, maxRandomExp)))
+    bob_kVal = random.randint(0, int(2 ** maxRandomExp))
     print(f"Bob calculates a random 'k' value - {bob_kVal}")
 
     bob_v = rsa.encrypt(pickle.dumps(bob_kVal + bob_x_b), alice_public)

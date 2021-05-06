@@ -1,7 +1,9 @@
 import random
 import hashlib
 import codecs
+import time
 
+randomSeed = int(round(time.time() * 10))
 
 def getHash(val):
     """
